@@ -1,25 +1,28 @@
-import thunk from 'redux-thunk';
-import { createStore, compose, applyMiddleware } from 'redux';
-import rootReducer from '../reducers/root';
-import { INITIAL_STATE } from "../reducers/constants"
+import thunk from "redux-thunk"
+import {applyMiddleware, createStore} from "redux"
+import {composeWithDevTools} from "redux-devtools-extension"
+import {Map} from "immutable"
 
-let store;
+import rootReducer from "../reducers/root"
+
+let store
 export default () => {
     if (store) {
-        return store;
+        return store
     }
-    store = makeStore();
-    return store;
+    store = makeStore()
+    return store
 };
 
 // To make a new store for testing
-export function makeStore(initialState = INITIAL_STATE) {
+// TODO: should initial state have placeholders?
+export function makeStore(initialState = new Map()) {
     return createStore(
         rootReducer,
         initialState,
-        compose(
-            applyMiddleware(thunk),
-            window.devToolsExtension()
+        composeWithDevTools(
+            applyMiddleware(thunk)
         )
     )
 }
+

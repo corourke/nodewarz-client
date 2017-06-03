@@ -1,5 +1,7 @@
 import {fromJS, List, Map} from 'immutable';
-import { INITIAL_STATE, DEFAULT_NODE } from "./constants"
+import {getNode, setNodeProps} from "./nodes"
+
+const INITIAL_STATE = new Map()
 
 export default function reducer(state = INITIAL_STATE, action) {
 
@@ -16,22 +18,6 @@ export default function reducer(state = INITIAL_STATE, action) {
 
         case 'SET_NETWORK':
             return INITIAL_STATE.merge(fromJS(action.network))
-
-        case 'ADD_NODE':
-            const node = DEFAULT_NODE.merge(action.node);
-            const nodes = state.get('nodes');
-            const new_nodes = nodes.push(Map(node));
-            return state.merge({nodes: new_nodes});
-
-        case 'SELECT_NODE':
-            console.log('SELECT_NODE: ' + action.nodeId);
-            return state
-
-        case 'SET_NODE_PROPS':
-            const nodeId = action.nodeProps.id
-            const nodeIndex = state.get('nodes').findIndex(
-                (node) => node.get('id') === nodeId)
-            return state.mergeDeepIn(['nodes', nodeIndex], action.nodeProps)
 
         case 'ADD_CONNECTION':
             const new_conns = state.get("connections").push(fromJS(action.connection));
@@ -67,14 +53,6 @@ export function setConnectionState(state, connected) {
 
 export function setNetwork(_net) {
     return {type: 'SET_NETWORK', network: _net}
-}
-
-export function addNode(_node) {
-    return {type: 'ADD_NODE', node: _node}
-}
-
-export function setNodeProps(_np) {
-    return {type: 'SET_NODE_PROPS', nodeProps: _np}
 }
 
 export function addConnection(_conn) {
@@ -115,12 +93,6 @@ export function attackInProgress(_store, attackerId, targetId) {
     var attacks = getAttacks(_store);
     if (attacks.size === 0) return false;
     return attacks.includes(Attack(attackerId, targetId));
-}
-
-export function getNode(_store, nodeId) {
-    return _store.getState()
-        .get('nodes')
-        .find( (node) => node.get('id') === nodeId )
 }
 
 // Return an array of nodes that are under attack

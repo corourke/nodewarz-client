@@ -1,8 +1,9 @@
 import React, {Component} from "react"
 import {connect} from "react-redux"
-import {Layer, Stage} from "react-konva"
+import {Layer} from "react-konva"
 import {List} from "immutable"
 import Node from "./Node"
+import pf from "pretty-format"
 
 class Nodes extends Component {
 
@@ -32,8 +33,10 @@ function handleClick(nodeId) {
 
 const NodesContainer = connect(
     (state) => {
+        console.log("Nodes (state)")
+        console.log(pf(state));
         return {
-            nodes: state.network.get('nodes', List()).toJS()
+            nodes: state.get('nodes', List()).toJS()
         }
     },
     (dispatch) => {

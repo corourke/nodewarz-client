@@ -1,4 +1,5 @@
 import {Map, List, fromJS} from "immutable"
+// import pf from "pretty-immutable"
 
 const INITIAL_STATE = fromJS(new List());
 
@@ -20,18 +21,20 @@ export default function reducer(state = INITIAL_STATE, action) {
             const node2 = (node.get('id') === 0) ? node.set('id', nextNodeId(state)) : node
             return state.push(Map(node2))
 
-        case 'SELECT_NODE':
-            console.log('SELECT_NODE: ' + action.nodeId)
-            return state
+        case 'SET_NODE_SELECTED':
+            return state.setIn([findNode(state, action.nodeId), 'selected'], !!(action.state))
 
         case 'SET_NODE_PROPS':
-            const nodeId = action.nodeProps.id
-            const nodeIndex = state.findIndex(
-                (node) => node.get('id') === nodeId)
-            return state.mergeDeepIn(['nodes', nodeIndex], action.nodeProps)
+            const nodeIndex = findNode(state, fromJS(action.nodeProps).get('id'))
+            return state.mergeDeepIn([nodeIndex], action.nodeProps)
 
     }
     return state
+}
+
+function findNode(state, nodeId) {
+    // TODO: make defensive
+    return state.findIndex((node) => node.get('id') === nodeId)
 }
 
 /* ACTION CREATORS */
@@ -43,6 +46,10 @@ export function addNode(_node) {
 
 export function setNodeProps(_np) {
     return {type: 'SET_NODE_PROPS', nodeProps: _np}
+}
+
+export function setNodeSelected(nodeId, state) {
+    return {type: 'SET_NODE_SELECTED', nodeId: nodeId, state: state}
 }
 
 

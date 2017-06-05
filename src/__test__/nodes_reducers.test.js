@@ -1,8 +1,8 @@
 import React from 'react';
-import pf from "pretty-immutable" //TODO: revert to pretty-format when it supports immutable
+// import pf from "pretty-immutable" //TODO: revert to pretty-format when it supports immutable
 import {fromJS, Map, List} from 'immutable';
 import * as C from './constants'
-import { addNode, setNodeProps, selectNodeList, getNode, nextNodeId } from "../reducers/nodes"
+import { addNode, setNodeProps, selectNodeList, getNode, nextNodeId, setNodeSelected } from "../reducers/nodes"
 import { makeStore } from "../store/configureStore"
 
 
@@ -44,21 +44,29 @@ describe("nodes reducer", function() {
     })
 
     it("should set node props", () => {
-        store.dispatch(setNodeProps({
+        const nodeProps = {
             id: 5,
             health: 20,
             owner: C.BLUE
-        }))
+        }
+        store.dispatch(setNodeProps(nodeProps))
 
-        let node = getNode(store, 1)
+        let node = getNode(store, nodeProps.id)
         expect(node).toBeDefined()
         Map.isMap(node)
         expect(node.get('owner')).toEqual(C.BLUE);
+        expect(node.get('health')).toEqual(20);
         expect(node.get('power')).toEqual(3);
     })
 
     it("should assign next node IDs", function() {
         store.dispatch(addNode({}))
         expect(getNode(store, 6)).toBeDefined()
+    })
+
+    it("should select / deselect a node", function() {
+        let node = getNode(store, 6)
+        store.dispatch(setNodeSelected(6, true))
+        expect(getNode(store, 6).get('selected')).toBeTruthy()
     })
 })

@@ -24,6 +24,11 @@ export default function reducer(state = INITIAL_STATE, action) {
         case 'SET_NODE_SELECTED':
             return state.setIn([findNode(state, action.nodeId), 'selected'], !!(action.state))
 
+        case 'TOGGLE_NODE_SELECTED':
+            let index = findNode(state, action.nodeId)
+            let selectState = index === -1 ? false : state.getIn([index, 'selected'])
+            return state.setIn([index, 'selected'], !(selectState))
+
         case 'SET_NODE_PROPS':
             const nodeIndex = findNode(state, fromJS(action.nodeProps).get('id'))
             return state.mergeDeepIn([nodeIndex], action.nodeProps)
@@ -50,6 +55,10 @@ export function setNodeProps(_np) {
 
 export function setNodeSelected(nodeId, state) {
     return {type: 'SET_NODE_SELECTED', nodeId: nodeId, state: state}
+}
+
+export function toggleNodeSelected(nodeId) {
+    return {type: 'TOGGLE_NODE_SELECTED', nodeId: nodeId}
 }
 
 

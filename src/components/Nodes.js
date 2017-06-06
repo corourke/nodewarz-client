@@ -3,7 +3,7 @@ import {connect} from "react-redux"
 import {Layer} from "react-konva"
 import {List} from "immutable"
 import Node from "./Node"
-import { setNodeSelected } from "../reducers/nodes"
+import { setNodeSelected, toggleNodeSelected } from "../reducers/nodes"
 import pf from "pretty-format"
 
 class Nodes extends Component {
@@ -16,7 +16,7 @@ class Nodes extends Component {
                 {
                     this.props.nodes.map(node => {
                         return <Node key={node.id} x={node.x} y={node.y} size={node.size} health={node.health}
-                                     color={node.color}
+                                     color={node.color} selected={node.selected || false}
                                      onClick={ () => this.props.onNodeClick(node.id) }
                                      // onClick={ () => handleClick(node.id)}
                         />
@@ -42,7 +42,7 @@ const NodesContainer = connect(
     },
     (dispatch) => {
         return ({
-            onNodeClick: (id) => { dispatch(setNodeSelected(id, true)) }
+            onNodeClick: (id) => { dispatch(toggleNodeSelected(id)) }
         })
     }
 )(Nodes)

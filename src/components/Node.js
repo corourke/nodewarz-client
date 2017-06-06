@@ -14,7 +14,7 @@ export default class Node extends Component {
     }
 
     static defaultProps = {
-        x: 100, y: 100, size: 50, health: 50, color: 'grey'
+        x: 100, y: 100, size: 50, health: 50, color: "grey"
     }
 
     constructor(...args) {
@@ -29,19 +29,22 @@ export default class Node extends Component {
         return (
             <Group onClick={this.props.onClick}>
                 <Circle
-                    x={this.props.x} y={this.props.y}
-                    radius={this.props.size}
+                    x={this.props.x} y={this.props.y} radius={this.props.size}
                     fill={this.props.color}
-                    shadowBlur={10}
-                    shadowColor={this.props.color}
+                    shadowBlur={10} shadowColor={this.props.color}
                 />
                 <Circle
                     x={this.props.x} y={this.props.y} radius={this.props.size * 0.7}
                     fill={Color(this.props.color).saturate(0.2).lighten(0.4)}
                 />
                 <Wedge x={this.props.x} y={this.props.y} radius={this.props.size}
-                       angle={180} rotation={125} fill={'black'} opacity={0.08}
+                       angle={180} rotation={125} fill={"black"} opacity={0.08}
                 />
+                <Circle
+                    name={"select"}
+                    x={this.props.x} y={this.props.y} radius={this.props.size}
+                    fillEnabled={false} strokeScaleEnabled={false}
+                    stroke={"white"} strokeWidth={5} visible={this.props.selected}/>
             </Group>
         )
     }

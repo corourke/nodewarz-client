@@ -9,8 +9,8 @@ import pf from "pretty-format"
 class Nodes extends Component {
 
     render() {
-        console.log("Nodes (props)")
-        console.log(JSON.stringify(this.props))
+        // console.log("Nodes (props)")
+        // console.log(JSON.stringify(this.props))
         return (
             <Layer>
                 {
@@ -34,8 +34,8 @@ function handleClick(nodeId) {
 
 const NodesContainer = connect(
     (state) => {
-        console.log("Nodes (state)")
-        console.log(pf(state));
+        // console.log("Nodes (state)")
+        // console.log(pf(state));
         return {
             nodes: state.get('nodes', List()).toJS()
         }

@@ -64,7 +64,7 @@ export function toggleNodeSelected(nodeId) {
 
 /* SELECTORS */
 
-export function selectNodeList(state) {
+export function getNodeList(state) {
     if (List.isList(state)) {
         return state                // Assume a list of nodes
     } else if (Map.isMap(state)) {
@@ -75,12 +75,14 @@ export function selectNodeList(state) {
 }
 
 export function getNode(state, nodeId) {
-    const nodeList = selectNodeList(state)
+    const nodeList = getNodeList(state)
     return nodeList.find((node) => node.get('id') === nodeId)
 }
 
 export function nextNodeId(state) {
-    const nodeList = selectNodeList(state)
+    const nodeList = getNodeList(state)
+    if(nodeList.size === 0) return 1;
+
     let maxNode = nodeList.max( (_a, _b) => {
             const a = _a.get('id'), b = _b.get('id')
             if (a < b) { return -1; }

@@ -34,8 +34,8 @@ function handleClick(nodeId) {
 
 const NodesContainer = connect(
     (state) => {
-        console.log("Nodes (state)")
-        console.log(pf(state));
+        // console.log("Nodes (state)")
+        // console.log(pf(state));
         return {
             nodes: state.get('nodes', List()).toJS()
         }

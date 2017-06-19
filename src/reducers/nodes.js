@@ -1,5 +1,5 @@
 import {Map, List, fromJS} from "immutable"
-// import pf from "pretty-immutable"
+import pf from "pretty-immutable"
 
 const INITIAL_STATE = fromJS(new List());
 
@@ -10,7 +10,8 @@ const DEFAULT_NODE = fromJS({
     power: 3,
     owner: 0,
     x: 100,
-    y: 100
+    y: 100,
+    selected: false
 });
 
 export default function reducer(state = INITIAL_STATE, action) {
@@ -89,4 +90,12 @@ export function nextNodeId(state) {
         })
 
     return maxNode.get('id')+1
+}
+
+export function getSelectedNodes(state) {
+    const nodeList = selectNodeList(state)
+    // console.log(pf(nodeList));
+    // TODO: Appears to only be giving back the first node found
+    const foundNodes = nodeList.find((node) => node.get('selected') === true)
+    return foundNodes || new List()
 }

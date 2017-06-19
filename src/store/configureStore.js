@@ -30,7 +30,7 @@ export function makeStore(initialState = new Map()) {
 }
 
 const attackChecker = store => next => action => {
-    console.log('dispatching', action.type)
+    // console.log('dispatching', action.type)
     if(action.type == 'TOGGLE_NODE_SELECTED') {
         let selectedNodes = getSelectedNodes(store)
         // TODO: This won't work because the nodes won't be selected until after the action is dispatched

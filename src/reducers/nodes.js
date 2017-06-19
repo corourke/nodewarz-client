@@ -95,7 +95,7 @@ export function nextNodeId(state) {
 }
 
 export function getSelectedNodes(state) {
-    const nodeList = selectNodeList(state)
+    const nodeList = getNodeList(state)
     // console.log(pf(nodeList));
     // TODO: Appears to only be giving back the first node found
     const foundNodes = nodeList.find((node) => node.get('selected') === true)

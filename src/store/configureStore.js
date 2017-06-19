@@ -1,9 +1,10 @@
 import thunk from "redux-thunk"
 import {applyMiddleware, createStore} from "redux"
 import {composeWithDevTools} from "redux-devtools-extension"
-import {Map} from "immutable"
+
+import {fromJS, Map} from "immutable"
 import {getSelectedNodes} from "../reducers/nodes"
-import pf from "pretty-immutable"
+
 
 import rootReducer from "../reducers/root"
 
@@ -21,7 +22,7 @@ export default () => {
 export function makeStore(initialState = new Map()) {
     return createStore(
         rootReducer,
-        initialState,
+        fromJS(initialState),
         composeWithDevTools(
             applyMiddleware(thunk, attackChecker)
         )

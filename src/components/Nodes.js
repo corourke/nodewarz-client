@@ -9,8 +9,8 @@ import pf from "pretty-format"
 class Nodes extends Component {
 
     render() {
-        console.log("Nodes (props)")
-        console.log(JSON.stringify(this.props))
+        // console.log("Nodes (props)")
+        // console.log(JSON.stringify(this.props))
         return (
             <Layer>
                 {

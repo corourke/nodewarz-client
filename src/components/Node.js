@@ -24,8 +24,8 @@ export default class Node extends Component {
     }
 
     render() {
-        console.log("Node (props):")
-        console.log(JSON.stringify(this.props))
+        // console.log("Node (props):")
+        // console.log(JSON.stringify(this.props))
         return (
             <Group onClick={this.props.onClick}>
                 <Circle

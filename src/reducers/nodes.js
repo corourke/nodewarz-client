@@ -1,7 +1,7 @@
 import {Map, List, fromJS} from "immutable"
 import pf from "pretty-immutable"
 
-const INITIAL_STATE = fromJS(new List());
+const INITIAL_STATE = fromJS(new List())
 
 const DEFAULT_NODE = fromJS({
     id: 0,
@@ -12,7 +12,7 @@ const DEFAULT_NODE = fromJS({
     x: 100,
     y: 100,
     selected: false
-});
+})
 
 export default function reducer(state = INITIAL_STATE, action) {
     // eslint-disable-next-line
@@ -82,22 +82,20 @@ export function getNode(state, nodeId) {
 
 export function nextNodeId(state) {
     const nodeList = getNodeList(state)
-    if(nodeList.size === 0) return 1;
+    if (nodeList.size === 0) return 1
 
-    let maxNode = nodeList.max( (_a, _b) => {
-            const a = _a.get('id'), b = _b.get('id')
-            if (a < b) { return -1; }
-            if (a > b) { return 1; }
-            if (a === b) { return 0; }
-        })
+    let maxNode = nodeList.max((_a, _b) => {
+        const a = _a.get('id'), b = _b.get('id')
+        if (a < b) { return -1 }
+        if (a > b) { return 1 }
+        if (a === b) { return 0 }
+    })
 
-    return maxNode.get('id')+1
+    return maxNode.get('id') + 1
 }
 
 export function getSelectedNodes(state) {
     const nodeList = getNodeList(state)
-    // console.log(pf(nodeList));
-    // TODO: Appears to only be giving back the first node found
-    const foundNodes = nodeList.find((node) => node.get('selected') === true)
+    const foundNodes = nodeList.filter((node) => node.get('selected') === true)
     return foundNodes || new List()
 }

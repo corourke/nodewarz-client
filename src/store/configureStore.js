@@ -3,7 +3,7 @@ import {applyMiddleware, createStore} from "redux"
 import {composeWithDevTools} from "redux-devtools-extension"
 
 import {fromJS, Map} from "immutable"
-import {getSelectedNodes} from "../reducers/nodes"
+import {getSelectedNodes, toggleNodeSelected} from "../reducers/nodes"
 
 
 import rootReducer from "../reducers/root"
@@ -31,7 +31,7 @@ export function makeStore(initialState = new Map()) {
 
 const attackChecker = store => next => action => {
     // console.log('dispatching', action.type)
-    if(action.type == 'TOGGLE_NODE_SELECTED') {
+    if(action.type === 'TOGGLE_NODE_SELECTED') {
         let selectedNodes = getSelectedNodes(store)
         // TODO: This won't work because the nodes won't be selected until after the action is dispatched
         // The way this needs to happen is:
@@ -40,7 +40,9 @@ const attackChecker = store => next => action => {
         //     If so dispatch an attack and ignore the selection action (keeping one selected)
         //   Otherwise ignore the invalid selection action
         // Otherwise, pass through the selection action
-        if (selectedNodes.length > 1) console.log('attack!')
+        if (selectedNodes.size > 1) console.log('attack!')
+        // TODO: clear all selected without using toggleNodeSelected!
+        //selectedNodes.forEach((node) => store.dispatch(toggleNodeSelected(node.get('id'))));
     }
     let result = next(action)
     return result

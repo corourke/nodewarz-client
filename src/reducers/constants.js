@@ -8,11 +8,10 @@ export const INITIAL_STATE = fromJS({
             connected: false
         },
         userId: 0
-    }
+    },
     nodes: [],
     connections: [],
-    attacks: [],
-    users: []
+    attacks: []
 });
 
 export const DEFAULT_NODE = fromJS({

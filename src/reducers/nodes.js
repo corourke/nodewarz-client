@@ -38,11 +38,6 @@ export default function reducer(state = INITIAL_STATE, action) {
     return state
 }
 
-function findNode(state, nodeId) {
-    // TODO: make defensive
-    return state.findIndex((node) => node.get('id') === nodeId)
-}
-
 /* ACTION CREATORS */
 
 
@@ -75,6 +70,13 @@ export function getNodeList(state) {
     }
 }
 
+// Returns the INDEX of the node in the node list
+function findNode(state, nodeId) {
+    const nodeList = getNodeList(state)
+    return nodeList.findIndex((node) => node.get('id') === nodeId)
+}
+
+// Returns the NODE with the given ID from the node list
 export function getNode(state, nodeId) {
     const nodeList = getNodeList(state)
     return nodeList.find((node) => node.get('id') === nodeId)

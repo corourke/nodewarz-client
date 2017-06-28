@@ -7,11 +7,13 @@ import {
     setNodeProps,
     getNodeList,
     getNode,
+    findNode,
     nextNodeId,
     setNodeSelected,
     toggleNodeSelected,
     getSelectedNodes
 } from "../reducers/nodes"
+import { setUserId } from "../reducers/game"
 import {makeStore} from "../store/configureStore"
 
 
@@ -37,6 +39,26 @@ describe("nextNodeId()", function() {
     it("should return the max node ID plus one", function() {
         let store = makeStore(fromJS({nodes: [C.blue_node, C.red_node2]}))
         expect(nextNodeId(store.getState().get("nodes"))).toEqual(C.red_node2.id + 1)
+    })
+})
+
+describe("nodes selectors: findNode", function() {
+    let store = makeStore(fromJS({nodes: [C.blue_node, C.red_node, C.green_node]}))
+    it("should return the index of a node in the node list", function() {
+        expect(findNode(store, C.red_node.id)).toEqual(1) // the INDEX value
+    })
+    it("should return -1 if no node is found", function() {
+        expect(findNode(store, C.red_node2.id)).toEqual(-1)
+    })
+})
+
+describe("nodes selectors: getNode", function() {
+    let store = makeStore(fromJS({nodes: [C.blue_node, C.red_node, C.green_node]}))
+    it("should return a node in the node list", function() {
+        expect(getNode(store, C.red_node.id)).toEqual(fromJS(C.red_node)) // the INDEX value
+    })
+    it("should return undefined if no node is found", function() {
+        expect(getNode(store, C.red_node2.id)).toEqual(undefined)
     })
 })
 
@@ -87,12 +109,14 @@ describe("nodes reducer", function() {
 
     it("should toggle the node select state", function() {
         let node = getNode(store, 5)
+        store.dispatch(setUserId(node.get("owner")))
         store.dispatch(setNodeSelected(5, false))
         store.dispatch(toggleNodeSelected(5))
         expect(getNode(store, 5).get("selected")).toBeTruthy()
         store.dispatch(toggleNodeSelected(5))
         expect(getNode(store, 5).get("selected")).toBeFalsy()
     })
+
 })
 
 // TODO: Remove or reimplement
@@ -107,15 +131,30 @@ describe("set nodes map", function() {
 
 describe("getSelectedNodes()", function() {
     let store = makeStore(fromJS({nodes: [C.blue_node, C.red_node, C.green_node]}))
-    store.dispatch(toggleNodeSelected(C.blue_node.id))
-    store.dispatch(toggleNodeSelected(C.red_node.id))
+    store.dispatch(setUserId(C.RED))
+
+    store.dispatch(toggleNodeSelected(C.blue_node.id)) // Don't own it
+    store.dispatch(toggleNodeSelected(C.red_node.id))  // First select, I own: OK
+    store.dispatch(toggleNodeSelected(C.green_node.id)) // Second select, I don't own: OK
 
     it("should return selected nodes only", function() {
-        var blue_node_selected = C.blue_node; blue_node_selected.selected = true;
         var red_node_selected = C.red_node; red_node_selected.selected = true;
-        expect(getSelectedNodes(store)).toEqual(fromJS([blue_node_selected, red_node_selected]))
+        var green_node_selected = C.green_node; green_node_selected.selected = true;
+        expect(getSelectedNodes(store)).toEqual(fromJS([red_node_selected, green_node_selected]))
     })
     it("should also take just the node list", function() {
         expect(getSelectedNodes(store.getState()).size).toEqual(2)
+    })
+})
+
+describe("toggleNodeSelected", function() {
+    let store = makeStore(fromJS({nodes: [C.blue_node, C.red_node, C.red_node2]}))
+    store.dispatch(setUserId(C.RED))
+    store.dispatch(toggleNodeSelected(C.red_node.id))
+    //store.dispatch(toggleNodeSelected(C.green_node.id))
+    it("should not toggle a node that isn't there", function(){
+        var red_node_selected = C.red_node; red_node_selected.selected = true;
+        expect(getSelectedNodes(store.getState())).toEqual(fromJS([red_node_selected]))
+
     })
 })

@@ -26,25 +26,45 @@ export default class Node extends Component {
     render() {
         // console.log("Node (props):")
         // console.log(JSON.stringify(this.props))
+        // TODO: Temporary color assignment
+        // TODO: Use colors from color table, not saturate, lighten
+        var useColor = this.props.color
+        switch(this.props.owner) {
+            case 0:
+                useColor = "#7BBC9B"
+                break
+            case 1:
+                useColor = "#3497B5"
+                break
+            case 2:
+                useColor = "#A43234"
+                break
+            default:
+                useColor = "grey"
+        }
         return (
             <Group onClick={this.props.onClick}>
-                <Circle
-                    x={this.props.x} y={this.props.y} radius={this.props.size}
-                    fill={this.props.color}
-                    shadowBlur={10} shadowColor={this.props.color}
+                <Circle name="outerCircle"
+                        x={this.props.x} y={this.props.y} radius={this.props.size}
+                        fill={useColor}
+                        shadowBlur={10} shadowColor={useColor}
                 />
-                <Circle
-                    x={this.props.x} y={this.props.y} radius={this.props.size * 0.7}
-                    fill={Color(this.props.color).saturate(0.2).lighten(0.4)}
+                <Wedge name="health"
+                       x={this.props.x} y={this.props.y} radius={this.props.size}
+                       angle={(1-(this.props.health / this.props.size)) * 360} fill={"grey"} rotation={-90}
+                />
+                <Circle name="innerCircle"
+                        x={this.props.x} y={this.props.y} radius={this.props.size * 0.7}
+                        fill={Color(useColor).saturate(0.2).lighten(0.4)}
                 />
                 <Wedge x={this.props.x} y={this.props.y} radius={this.props.size}
                        angle={180} rotation={125} fill={"black"} opacity={0.08}
                 />
-                <Circle
-                    name={"select"}
-                    x={this.props.x} y={this.props.y} radius={this.props.size}
-                    fillEnabled={false} strokeScaleEnabled={false}
-                    stroke={"white"} strokeWidth={5} visible={this.props.selected}/>
+                <Circle name={"select"}
+                        x={this.props.x} y={this.props.y} radius={this.props.size}
+                        fillEnabled={false} strokeScaleEnabled={false}
+                        stroke={"white"} strokeWidth={5} visible={this.props.selected}
+                />
             </Group>
         )
     }

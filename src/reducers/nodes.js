@@ -27,8 +27,12 @@ export default function reducer(state = INITIAL_STATE, action) {
 
         case 'TOGGLE_NODE_SELECTED':
             let index = findNode(state, action.nodeId)
-            let selectState = index === -1 ? false : state.getIn([index, 'selected'])
-            return state.setIn([index, 'selected'], !(selectState))
+            // console.log("In TOGGLE_NODE_SELECTED reducer, nodeId is: " + action.nodeId)
+            if(index != -1) {
+                let selectState = state.getIn([index, 'selected']) || false
+                return state.setIn([index, 'selected'], !(selectState))
+            }
+
 
         case 'SET_NODE_PROPS':
             const nodeIndex = findNode(state, fromJS(action.nodeProps).get('id'))
@@ -70,13 +74,13 @@ export function getNodeList(state) {
     }
 }
 
-// Returns the INDEX of the node in the node list
-function findNode(state, nodeId) {
+// Returns the INDEX of the node in the node list, -1 if not found
+export function findNode(state, nodeId) {
     const nodeList = getNodeList(state)
     return nodeList.findIndex((node) => node.get('id') === nodeId)
 }
 
-// Returns the NODE with the given ID from the node list
+// Returns the NODE with the given ID from the node list, undefined if not found
 export function getNode(state, nodeId) {
     const nodeList = getNodeList(state)
     return nodeList.find((node) => node.get('id') === nodeId)
@@ -98,6 +102,9 @@ export function nextNodeId(state) {
 
 export function getSelectedNodes(state) {
     const nodeList = getNodeList(state)
-    const foundNodes = nodeList.filter((node) => node.get('selected') === true)
-    return foundNodes || new List()
+    var foundNodes = new List()
+    if(nodeList.size > 0) {
+        foundNodes = nodeList.filter((node) => node.get('selected') === true)
+    }
+    return foundNodes
 }

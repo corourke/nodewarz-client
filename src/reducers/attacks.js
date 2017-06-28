@@ -12,7 +12,9 @@ export default function reducer(state = INITIAL_STATE, action) {
         case 'NEW_ATTACK':
             // TODO: should we check that attack is not already in the list?
             // TODO: Check that the attack is along a connection
-            return state.push(action.attack)
+            // TODO: Handle the case of an assist
+            // TODO: Distribute power evenly across attacks from same node
+            return state.push(fromJS(action.attack))
 
         case 'RESET_ATTACKS':
             return new List();

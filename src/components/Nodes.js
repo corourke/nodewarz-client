@@ -16,7 +16,7 @@ class Nodes extends Component {
                 {
                     this.props.nodes.map(node => {
                         return <Node key={node.id} x={node.x} y={node.y} size={node.size} health={node.health}
-                                     color={node.color} selected={node.selected || false}
+                                     color={node.color} owner={node.owner} selected={node.selected || false}
                                      onClick={ () => this.props.onNodeClick(node.id) }
                                      // onClick={ () => handleClick(node.id)}
                         />

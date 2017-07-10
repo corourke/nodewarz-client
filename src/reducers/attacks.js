@@ -1,5 +1,6 @@
 import {fromJS, List, Map} from 'immutable';
 import {getNode, setNodeProps} from "./nodes"
+import uuidV4 from "uuid/v4";
 import pf from "pretty-immutable"
 
 const INITIAL_STATE = new List()
@@ -41,11 +42,16 @@ export function removeAttacks(_nodeId) {
     return {type: 'REMOVE_ATTACKS', nodeId: _nodeId};
 }
 
+export function removeAttack(_attackId) {
+    return {type: 'REMOVE_ATTACK', attackId: _attackId}
+}
+
 
 /* UTILITY */
 
 export function Attack(attacker, target) {
-    return fromJS({attackNodeId: attacker, targetNodeId: target})
+    // uuidV4 is a unique ID generator, looks like '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
+    return fromJS({id: uuidV4(), attackNodeId: attacker, targetNodeId: target})
 }
 
 

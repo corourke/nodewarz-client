@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import Nodes from "./Nodes"
+import Connectors from './Connectors'
 import {Stage} from "react-konva"
 
 class Game extends Component {
@@ -9,12 +10,13 @@ class Game extends Component {
         console.log(JSON.stringify(this.props))
         return (
             <Stage width={700} height={700}>
+                <Connectors />
                 <Nodes/>
-                {/*<Connections />*/}
             </Stage>
         )
     }
 }
 
+// Note: Connectors will render underneath Nodes
 
 export default Game

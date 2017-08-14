@@ -80,12 +80,7 @@ export function sendAction(action) {
 ReactDOM.render(<App />, document.getElementById('root'))
 registerServiceWorker()
 
-ReactDOM.render(
-    <Provider store={store}>
-        <Game />
-    </Provider>
-    , document.getElementById('gameCanvas')
-)
+
 
 // store.dispatch(addNode(C.blue_node))
 // store.dispatch(addNode(C.blue_node2))

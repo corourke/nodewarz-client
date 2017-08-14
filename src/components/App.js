@@ -1,18 +1,40 @@
-import React, { Component } from 'react';
-import logo from '../logo.svg';
+import React, {Component} from 'react';
+import {Provider} from "react-redux"
+import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
+import configureStore from "../store/configureStore"
+import Game from "./Game"
+import LoginPage from "./LoginPage"
+
+
 import './App.css';
 
+const store = configureStore()
+
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Nodewarz</h2>
-        </div>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <BrowserRouter>
+
+                    <Switch>
+                        <Route exact path="/" render={ () => (
+                            <Provider store={store}>
+                                <Game />
+                            </Provider>
+                        )} />
+                        <Route path="/login" component={LoginPage}/>
+                    </Switch>
+
+            </BrowserRouter>
+        );
+    }
 }
 
 export default App;
+
+
+const Links = () => (
+    <nav id="nav_link">
+        <Link id="home_link" to="/">Home</Link>
+        <Link id="login_link" replace to="/login">Login</Link>
+    </nav>
+);

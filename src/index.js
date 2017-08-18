@@ -66,6 +66,7 @@ socket.on('chat', function(msg) {
     socket.on(ev, () => {
         store.dispatch(setConnectionState(ev, socket.connected))
         if (ev === 'connect') {
+            // TODO: This needs to be moved to the login page
             socket.emit('login', 'dummy_user_info')
         }
     })

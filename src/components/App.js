@@ -8,10 +8,11 @@ import LoginPage from "./LoginPage"
 
 import './App.css';
 
-const store = configureStore()
+const store = configureStore();
 
 class App extends Component {
     render() {
+        // TODO: If user not logged (no clientID) we need to go to login page
         return (
             <BrowserRouter>
 

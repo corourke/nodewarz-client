@@ -1,17 +1,7 @@
 import {fromJS, List, Map} from 'immutable'
+import * as C from './constants'
 
-const INITIAL_STATE = new Map(
-    {
-        clientId: 0,
-        connection: {
-            state: "unknown",
-            connected: false
-        },
-        userId: 0
-    }
-)
-
-export default function reducer(state = INITIAL_STATE, action) {
+export default function reducer(state = C.INITIAL_GAME_STATE, action) {
 
     // eslint-disable-next-line
     switch (action.type) {
@@ -19,16 +9,19 @@ export default function reducer(state = INITIAL_STATE, action) {
             return state.set('clientId', action.clientId)
 
         case 'SET_CONNECTION_STATE':
-            return state.set('connection', Map({
-                state: action.state,
-                connected: action.connected
+            let newState = state.set('connection', Map({
+                event: action.event,
+                connected: action.connected,
+                socket: action.socket
             }))
+            if (action.event === 'disconnect') {
+                return newState.set('clientId', 0)
+            } else {
+                return newState
+            }
 
         case 'SET_USER_ID':
             return state.set('userId', action.userId)
-
-        case 'SET_NETWORK':
-            return INITIAL_STATE.merge(fromJS(action.network))
 
     }
     return state
@@ -40,15 +33,11 @@ export function setClientId(clientId) {
     return {type: 'SET_CLIENT_ID', clientId}
 }
 
-export function setConnectionState(state, connected) {
-    return {type: 'SET_CONNECTION_STATE', state, connected}
+export function setConnectionState(event, connected, socket) {
+    return {type: 'SET_CONNECTION_STATE', event, connected, socket}
 }
 
 export function setUserId(userId) {
     return {type: 'SET_USER_ID', userId}
-}
-
-export function setNetwork(_net) {
-    return {type: 'SET_NETWORK', network: _net}
 }
 

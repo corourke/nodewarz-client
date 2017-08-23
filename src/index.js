@@ -64,11 +64,13 @@ socket.on('chat', function(msg) {
     'reconnect_failed'
 ].forEach(ev =>
     socket.on(ev, () => {
-        store.dispatch(setConnectionState(ev, socket.connected))
-        if (ev === 'connect') {
-            // TODO: This needs to be moved to the login page
-            socket.emit('login', 'dummy_user_info')
-        }
+        store.dispatch(setConnectionState(ev, socket.connected, socket))
+        // let userId = store.getState().get('userId')
+        // console.log('onConnect, userId: ', userId);
+        // if (ev === 'connect' && userId !== null) {
+        //     // TODO: This needs to be moved to the login page
+        //     socket.emit('login', userId)
+        // }
     })
 );
 

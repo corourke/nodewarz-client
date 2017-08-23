@@ -1,36 +1,31 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {Provider} from "react-redux"
-import {BrowserRouter, Switch, Route, Link} from 'react-router-dom'
+import {BrowserRouter, Switch, Route, Link, Redirect} from 'react-router-dom'
 import configureStore from "../store/configureStore"
 import Game from "./Game"
 import LoginPage from "./LoginPage"
+import './App.css'
 
-
-import './App.css';
-
-const store = configureStore();
+const store = configureStore()
 
 class App extends Component {
+
     render() {
         // TODO: If user not logged (no clientID) we need to go to login page
         return (
-            <BrowserRouter>
-
+            <Provider store={store}>
+                <BrowserRouter>
                     <Switch>
-                        <Route exact path="/" render={ () => (
-                            <Provider store={store}>
-                                <Game />
-                            </Provider>
-                        )} />
-                        <Route path="/login" component={LoginPage}/>
+                        <PrivateRoute path="/game" component={Game} />
+                        <Route path="/login" component={LoginPage} />
                     </Switch>
-
-            </BrowserRouter>
-        );
+                </BrowserRouter>
+            </Provider>
+        )
     }
 }
 
-export default App;
+export default App
 
 
 const Links = () => (
@@ -38,4 +33,17 @@ const Links = () => (
         <Link id="home_link" to="/">Home</Link>
         <Link id="login_link" replace to="/login">Login</Link>
     </nav>
-);
+)
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={props => (
+        store.getState().getIn(['game','userId']) !== null ? (
+            <Component {...props}/>
+        ) : (
+            <Redirect to={{
+                pathname: '/login',
+                state: { from: props.location }
+            }}/>
+        )
+    )}/>
+)
